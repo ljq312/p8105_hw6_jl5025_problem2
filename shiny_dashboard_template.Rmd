@@ -3,7 +3,8 @@ title: "Untitled"
 output: 
   flexdashboard::flex_dashboard:
     orientation: row
-  runtime: shiny
+    source_code: embed
+runtime: shiny
 ---
 
 ```{r setup, include=FALSE}
@@ -44,6 +45,15 @@ type <- nyc_inspections %>%
 
 selectInput("cuisine_type", label = h3("Select cuisine type"),
             choices = type, selected = "American")
+
+boros <- nyc_inspections %>% 
+  distinct(boro) %>% 
+  pull()
+
+# radioButtons widget
+
+radioButtons("boro_choice", label = h3("Select boro"),
+             choices = boros, selected = "Manhattan")
 ```
 
 
@@ -64,9 +74,10 @@ inspection_words =
 
 renderPlotly({
 inspection_words %>% 
-    filter(cuisine_description == input$cuisine_type) %>% 
+    filter(cuisine_description == input$cuisine_type,
+           boro == input$boro_choice) %>% 
   count(word, sort = TRUE) %>% 
-  top_n(10) %>% 
+  head(10) %>% 
   mutate(word = fct_reorder(word, n)) %>% 
   plot_ly(x = ~word, y = ~n, type = "bar", color = ~word)
     
@@ -79,12 +90,32 @@ Row {.tabset .tabset-fade}
 ### Chart B
 
 ```{r}
-
+renderPlotly({
+  nyc_inspections %>%
+    filter(cuisine_description == input$cuisine_type,
+           boro == input$boro_choice) %>% 
+  group_by(grade) %>%
+  summarize(count = n()) %>%
+  plot_ly(labels = ~grade, values = ~count) %>%
+  add_pie(hole = 0.6) %>%
+  layout(title = "Donut charts using Plotly",  showlegend = F,
+         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+})
 ```
 
 ### Chart C
 
 ```{r}
-
+renderPlotly({
+  nyc_inspections %>% 
+  group_by(boro, grade) %>% 
+  summarize(n = n()) %>% 
+  spread(key = grade, value = n) %>% 
+  plot_ly( x = ~boro, y =~A, type = 'bar', name = 'A') %>% 
+  add_trace(y =~B, name = "B") %>%
+  add_trace(y =~C, name = "C") %>% 
+  layout(yaxis = list(title = 'Count'), barmode = 'stack')
+})
 ```
 
