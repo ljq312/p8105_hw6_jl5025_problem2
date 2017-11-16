@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "2525532879",
     "id" : "D19B03AA",
-    "lastKnownWriteTime" : 1509729869,
-    "last_content_update" : 1509729869,
+    "lastKnownWriteTime" : 1510812955,
+    "last_content_update" : 1510812955627,
     "path" : "~/Desktop/Data Science_2017Fall/HW/p8105_hw6_jl5025/p8105_hw6_jl5025_problem2/shiny_dashboard_template.Rmd",
     "project_path" : "shiny_dashboard_template.Rmd",
     "properties" : {
-        "cursorPosition" : "11,0",
-        "scrollLine" : "0"
+        "cursorPosition" : "68,10",
+        "scrollLine" : "51"
     },
     "relative_order" : 1,
     "source_on_save" : false,
