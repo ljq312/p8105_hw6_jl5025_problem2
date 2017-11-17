@@ -98,7 +98,7 @@ renderPlotly({
   summarize(count = n()) %>%
   plot_ly(labels = ~grade, values = ~count) %>%
   add_pie(hole = 0.6) %>%
-  layout(title = "Donut charts using Plotly",  showlegend = F,
+  layout(title = "Donut charts using Plotly",  showlegend = T,
          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 })
@@ -109,6 +109,7 @@ renderPlotly({
 ```{r}
 renderPlotly({
   nyc_inspections %>% 
+    filter(cuisine_description == input$cuisine_type) %>% 
   group_by(boro, grade) %>% 
   summarize(n = n()) %>% 
   spread(key = grade, value = n) %>% 
