@@ -1,5 +1,6 @@
 ---
-title: "Untitled"
+title: "NYC restaurant dashboard"
+author: "Jiaqi Li & Leiyu Yue"
 output: 
   flexdashboard::flex_dashboard:
     orientation: row
