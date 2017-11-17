@@ -30,7 +30,7 @@ nyc_inspections <- read_csv("./data/DOHMH_New_York_City_Restaurant_Inspection_Re
          boro != "Missing") %>% 
   mutate(boro = str_to_title(boro),
          inspection_num = row_number()) %>%
-  select(inspection_num, boro, grade, score, critical_flag, dba, cuisine_description, zipcode, violation_description)
+  select(inspection_num, boro, grade, cuisine_description, violation_description)
 ```
 
 
@@ -61,7 +61,7 @@ radioButtons("boro_choice", label = h3("Select boro"),
 Row
 -----------------------------------------------------------------------
 
-### Chart A
+### The 10 most frequently used words in "violation description"
 
 ```{r}
 
@@ -88,7 +88,7 @@ inspection_words %>%
 Row {.tabset .tabset-fade}
 -----------------------------------------------------------------------
 
-### Chart B
+### The percentage of grade A, B, C restaurants in NYC
 
 ```{r}
 renderPlotly({
@@ -97,15 +97,16 @@ renderPlotly({
            boro == input$boro_choice) %>% 
   group_by(grade) %>%
   summarize(count = n()) %>%
+  mutate(percentage = paste(round(count/sum(count), 2)*100, "%")) %>% 
   plot_ly(labels = ~grade, values = ~count) %>%
   add_pie(hole = 0.6) %>%
-  layout(title = "Donut charts using Plotly",  showlegend = T,
+  layout(showlegend = T,
          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 })
 ```
 
-### Chart C
+### Number of grade A, B, C restaurants for each boro
 
 ```{r}
 renderPlotly({
@@ -119,5 +120,10 @@ renderPlotly({
   add_trace(y =~C, name = "C") %>% 
   layout(yaxis = list(title = 'Count'), barmode = 'stack')
 })
+```
+
+```{r}
+## update on shiny
+# rsconnect::deployApp('/Users/jiaqili/Desktop/Data Science_2017Fall/HW/p8105_hw6_jl5025/p8105_hw6_jl5025_problem2')
 ```
 
